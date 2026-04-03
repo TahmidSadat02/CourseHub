@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CourseHub — University Learning Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="coursehub.css" />
+</head>
+<body>
+
+<nav>
+  <div class="logo" onclick="showPage('home')">Course<span>Hub</span></div>
+  <div class="nav-right">
+    <button class="nav-btn active" id="nav-home" onclick="showPage('home')">All Courses</button>
+    <button class="nav-btn" id="nav-bookmarks" onclick="showPage('bookmarks')">★ Bookmarks</button>
+  </div>
+</nav>
+
+<!-- HOME PAGE -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <h1>Learn Anything,<br><em>At Your Pace</em></h1>
+    <p>Your university's curated video library — organized, tracked, and always at your fingertips.</p>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num" id="stat-courses">0</span><span class="stat-label">Courses</span></div>
+      <div class="stat"><span class="stat-num" id="stat-videos">0</span><span class="stat-label">Videos</span></div>
+      <div class="stat"><span class="stat-num" id="stat-watched">0</span><span class="stat-label">Watched</span></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="search-wrap">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input class="search-input" type="text" id="search-input" placeholder="Search courses..." oninput="filterCourses()" />
+    </div>
+    <div class="filter-tags" id="filter-tags"></div>
+  </div>
+
+  <div class="courses-grid" id="courses-grid"></div>
+</div>
+
+<!-- COURSE DETAIL PAGE -->
+<div class="page" id="page-detail">
+  <div id="course-detail"></div>
+</div>
+
+<!-- BOOKMARKS PAGE -->
+<div class="page" id="page-bookmarks">
+  <div class="page-header">
+    <h2>★ Bookmarked Courses</h2>
+    <p>Courses you've saved for quick access</p>
+  </div>
+  <div class="courses-grid" id="bookmarks-grid"></div>
+</div>
+
+<div id="toast"></div>
+
+<script src="coursehub.js" defer></script>
+</body>
+</html>
