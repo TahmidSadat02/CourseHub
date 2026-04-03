@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CourseHub — Admin Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+
+  <!-- LOGIN SCREEN -->
+  <div id="login-screen">
+    <div class="login-box">
+      <div class="logo">Course<span>Hub</span></div>
+      <p>Admin Panel — Sign in to continue</p>
+      <input type="password" id="login-input" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')login()" />
+      <div class="login-hint">Default password: admin123</div>
+      <button class="btn btn-primary" style="width:100%" onclick="login()">Sign In</button>
+      <div class="login-error" id="login-error">Incorrect password. Try again.</div>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div id="app">
+    <nav>
+      <div class="logo">Course<span>Hub</span> <span class="admin-badge">Admin</span></div>
+      <div class="nav-right">
+        <a href="coursehub.html" target="_blank" class="nav-link">↗ View Student Site</a>
+        <button class="btn btn-ghost" onclick="logout()">Sign Out</button>
+      </div>
+    </nav>
+
+    <div class="layout">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <span>Courses</span>
+          <button class="btn btn-primary btn-sm" onclick="openCourseModal()">+ New</button>
+        </div>
+        <div id="course-list"></div>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="main">
+
+        <!-- DASHBOARD -->
+        <div id="view-dashboard">
+          <div class="page-title">
+            <h2>Dashboard</h2>
+            <p>Overview of your CourseHub content</p>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-label">Total Courses</div>
+              <div class="stat-num" id="d-courses">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Total Videos</div>
+              <div class="stat-num" id="d-videos">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Categories</div>
+              <div class="stat-num" id="d-cats">0</div>
+            </div>
+          </div>
+          <div class="dashboard-tip">
+            <div class="tip-icon">💡</div>
+            <div>
+              <strong>Getting started</strong>
+              <p>Select a course from the sidebar to manage its videos, or click <em>+ New</em> to create a course.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- COURSE EDITOR -->
+        <div id="view-course" style="display:none">
+          <div class="page-title-row">
+            <div style="display:flex;align-items:center;gap:1rem">
+              <div class="course-emoji-big" id="edit-course-emoji"></div>
+              <div>
+                <h2 id="edit-course-name"></h2>
+                <p id="edit-course-cat"></p>
+              </div>
+            </div>
+            <div class="action-row">
+              <button class="btn btn-ghost" onclick="openCourseModal(activeCourseId)">✏️ Edit</button>
+              <button class="btn btn-danger" onclick="deleteCourse(activeCourseId)">🗑 Delete</button>
+            </div>
+          </div>
+
+          <div class="section-header">
+            <h3>Videos <span class="count-badge" id="video-count">0</span></h3>
+            <button class="btn btn-primary btn-sm" onclick="openVideoModal()">+ Add Video</button>
+          </div>
+
+          <div id="video-table-wrap">
+            <table class="video-table">
+              <thead>
+                <tr>
+                  <th style="width:40px">#</th>
+                  <th>Title</th>
+                  <th style="width:100px">Duration</th>
+                  <th>YouTube URL</th>
+                  <th style="width:120px">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="video-tbody"></tbody>
+            </table>
+          </div>
+          <div id="no-videos" class="empty-msg">No videos yet. Click <strong>+ Add Video</strong> to get started.</div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- COURSE MODAL -->
+  <div class="modal-overlay" id="course-modal" onclick="closeModals(event)">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="course-modal-title">New Course</h3>
+        <button class="modal-close" onclick="closeCourseModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="cm-id" />
+        <div class="form-row">
+          <div class="form-group" style="flex:0 0 80px">
+            <label>Emoji</label>
+            <input type="text" id="cm-emoji" maxlength="2" placeholder="📚" />
+          </div>
+          <div class="form-group" style="flex:1">
+            <label>Course Title <span class="req">*</span></label>
+            <input type="text" id="cm-title" placeholder="e.g. Web Development Fundamentals" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="flex:1">
+            <label>Category <span class="req">*</span></label>
+            <input type="text" id="cm-category" placeholder="e.g. Programming, Data Science" />
+          </div>
+          <div class="form-group" style="flex:1">
+            <label>Level <span class="req">*</span></label>
+            <select id="cm-level">
+              <option value="Beginner">Beginner</option>
+              <option value="Intermediate">Intermediate</option>
+              <option value="Advanced">Advanced</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="cm-desc" rows="3" placeholder="Short description of this course..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Card Color</label>
+          <div class="color-options" id="cm-color-options"></div>
+          <input type="hidden" id="cm-color" value="thumb-blue" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeCourseModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveCourse()">Save Course</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIDEO MODAL -->
+  <div class="modal-overlay" id="video-modal" onclick="closeModals(event)">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="video-modal-title">Add Video</h3>
+        <button class="modal-close" onclick="closeVideoModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="vm-id" />
+        <div class="form-group">
+          <label>Video Title <span class="req">*</span></label>
+          <input type="text" id="vm-title" placeholder="e.g. Introduction to HTML" />
+        </div>
+        <div class="form-group">
+          <label>Duration</label>
+          <input type="text" id="vm-dur" placeholder="e.g. 18 min" />
+        </div>
+        <div class="form-group">
+          <label>YouTube URL <span class="req">*</span></label>
+          <input type="url" id="vm-url" placeholder="https://www.youtube.com/watch?v=..." />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeVideoModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveVideo()">Save Video</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+  <script src="admin.js"></script>
+</body>
+</html>

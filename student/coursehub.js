@@ -1,4 +1,4 @@
-const COURSES = [
+const DEFAULT_COURSES = [
   {
     id: 1, emoji: "💻", thumbClass: "thumb-blue",
     title: "Web Development Fundamentals",
@@ -112,6 +112,9 @@ const COURSES = [
     ]
   }
 ];
+
+const stored = localStorage.getItem("ch_courses");
+let COURSES = stored ? JSON.parse(stored) : DEFAULT_COURSES;
 
 let state = {
   watched: JSON.parse(localStorage.getItem('ch_watched') || '{}'),
