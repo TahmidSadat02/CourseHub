@@ -38,7 +38,7 @@ h1,h2,h3,h4 { font-family: 'Syne', sans-serif; }
   border-radius: 20px;
   padding: 2.5rem;
   width: 100%;
-  max-width: 380px;
+  max-width: 420px;
   text-align: center;
 }
 
@@ -48,10 +48,34 @@ h1,h2,h3,h4 { font-family: 'Syne', sans-serif; }
   margin-bottom: 2rem;
 }
 
+.login-box input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+
+.login-box input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.login-box input::placeholder {
+  color: var(--text-dim);
+}
+
 .login-hint {
   font-size: 0.78rem;
   color: var(--text-dim);
   margin-bottom: 1rem;
+  background: rgba(255,196,79,0.08);
+  padding: 8px 12px;
+  border-radius: 8px;
 }
 
 .login-error {

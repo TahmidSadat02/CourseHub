@@ -1,10 +1,9 @@
 // ── DEFAULT COURSES (same as coursehub.js) ──
 const DEFAULT_COURSES = [
   {
-    id: 1, emoji: "💻", thumbClass: "thumb-blue",
+    id: 1, thumbClass: "thumb-blue",
     title: "Web Development Fundamentals",
-    category: "Programming", level: "Beginner",
-    desc: "Build your first website from scratch using HTML, CSS, and JavaScript.",
+    category: "Programming",
     videos: [
       { id: "v1_1", title: "Introduction to HTML", dur: "18 min", url: "https://www.youtube.com/watch?v=qz0aGYrrlhU" },
       { id: "v1_2", title: "CSS Styling & Layouts", dur: "24 min", url: "https://www.youtube.com/watch?v=yfoY53QXEnI" },
@@ -15,10 +14,9 @@ const DEFAULT_COURSES = [
     ]
   },
   {
-    id: 2, emoji: "🐍", thumbClass: "thumb-green",
+    id: 2, thumbClass: "thumb-green",
     title: "Python Programming",
-    category: "Programming", level: "Beginner",
-    desc: "From variables to functions to data structures — a comprehensive intro to Python programming.",
+    category: "Programming",
     videos: [
       { id: "v2_1", title: "Python Installation & Setup", dur: "12 min", url: "https://www.youtube.com/watch?v=YYXdXT2l-Gg" },
       { id: "v2_2", title: "Variables & Data Types", dur: "20 min", url: "https://www.youtube.com/watch?v=khKv-8q7YmY" },
@@ -30,10 +28,9 @@ const DEFAULT_COURSES = [
     ]
   },
   {
-    id: 3, emoji: "📊", thumbClass: "thumb-purple",
+    id: 3, thumbClass: "thumb-purple",
     title: "Data Science with Python",
-    category: "Data Science", level: "Intermediate",
-    desc: "Analyze real-world datasets using NumPy, Pandas, and Matplotlib.",
+    category: "Data Science",
     videos: [
       { id: "v3_1", title: "NumPy Fundamentals", dur: "26 min", url: "https://www.youtube.com/watch?v=QUT1VHiLmmI" },
       { id: "v3_2", title: "Pandas DataFrames", dur: "30 min", url: "https://www.youtube.com/watch?v=vmEHCJofslg" },
@@ -43,10 +40,9 @@ const DEFAULT_COURSES = [
     ]
   },
   {
-    id: 4, emoji: "🤖", thumbClass: "thumb-red",
+    id: 4, thumbClass: "thumb-red",
     title: "Machine Learning",
-    category: "AI/ML", level: "Advanced",
-    desc: "Understand ML algorithms from scratch — regression, classification, clustering, and neural nets.",
+    category: "AI/ML",
     videos: [
       { id: "v4_1", title: "What is Machine Learning?", dur: "18 min", url: "https://www.youtube.com/watch?v=ukzFI9rgwfU" },
       { id: "v4_2", title: "Linear Regression", dur: "28 min", url: "https://www.youtube.com/watch?v=CRxhSZUIe3Y" },
@@ -58,10 +54,9 @@ const DEFAULT_COURSES = [
     ]
   },
   {
-    id: 5, emoji: "🗄️", thumbClass: "thumb-orange",
+    id: 5, thumbClass: "thumb-orange",
     title: "Database Management",
-    category: "Database", level: "Intermediate",
-    desc: "Master SQL from basics to advanced queries.",
+    category: "Database",
     videos: [
       { id: "v5_1", title: "Database Design Principles", dur: "20 min", url: "https://www.youtube.com/watch?v=ztHopE5Wnpc" },
       { id: "v5_2", title: "SQL SELECT & Filtering", dur: "24 min", url: "https://www.youtube.com/watch?v=HXV3zeQKqGY" },
@@ -71,10 +66,9 @@ const DEFAULT_COURSES = [
     ]
   },
   {
-    id: 6, emoji: "📱", thumbClass: "thumb-teal",
+    id: 6, thumbClass: "thumb-teal",
     title: "Mobile App Development",
-    category: "Programming", level: "Advanced",
-    desc: "Build cross-platform apps with React Native.",
+    category: "Programming",
     videos: [
       { id: "v6_1", title: "React Native Setup", dur: "16 min", url: "https://www.youtube.com/watch?v=0-S5a0eXPoc" },
       { id: "v6_2", title: "Core Components", dur: "28 min", url: "https://www.youtube.com/watch?v=06-1kIJr3EM" },
@@ -96,6 +90,7 @@ const COLORS = [
 ];
 
 // ── STATE ──
+const ADMIN_EMAIL = "admin@coursehub.com";
 const ADMIN_PASS = "admin123";
 let courses = [];
 let activeCourseId = null;
@@ -113,15 +108,18 @@ function saveCourses() {
 
 // ── AUTH ──
 function login() {
-  const val = document.getElementById("login-input").value;
+  const email = document.getElementById("login-email").value;
+  const password = document.getElementById("login-password").value;
   const err = document.getElementById("login-error");
-  if (val === ADMIN_PASS) {
+
+  if (email === ADMIN_EMAIL && password === ADMIN_PASS) {
     document.getElementById("login-screen").style.display = "none";
     document.getElementById("app").classList.add("show");
     init();
   } else {
     err.classList.add("show");
-    document.getElementById("login-input").value = "";
+    document.getElementById("login-email").value = "";
+    document.getElementById("login-password").value = "";
   }
 }
 
@@ -162,7 +160,7 @@ function renderSidebar() {
   }
   list.innerHTML = courses.map(c => `
     <div class="sidebar-item${activeCourseId === c.id ? ' active' : ''}" onclick="selectCourse(${c.id})" id="si-${c.id}">
-      <span class="sidebar-item-emoji">${c.emoji || '📚'}</span>
+      <span class="sidebar-item-emoji"></span>
       <span class="sidebar-item-title">${c.title}</span>
       <span class="sidebar-item-count">${c.videos.length}</span>
     </div>
@@ -174,9 +172,8 @@ function selectCourse(id) {
   activeCourseId = id;
   renderSidebar();
   const course = courses.find(c => c.id === id);
-  document.getElementById("edit-course-emoji").textContent = course.emoji || "📚";
   document.getElementById("edit-course-name").textContent = course.title;
-  document.getElementById("edit-course-cat").textContent = `${course.category} · ${course.level}`;
+  document.getElementById("edit-course-cat").textContent = course.category;
   document.getElementById("view-dashboard").style.display = "none";
   document.getElementById("view-course").style.display = "block";
   renderVideoTable(course);
@@ -206,8 +203,8 @@ function renderVideoTable(course) {
       <td class="url-cell"><a href="${v.url}" target="_blank" rel="noopener">${v.url}</a></td>
       <td>
         <div style="display:flex;gap:6px">
-          <button class="btn-icon" onclick="openVideoModal('${v.id}')">✏️</button>
-          <button class="btn-icon del" onclick="deleteVideo('${v.id}')">🗑</button>
+          <button class="btn-icon" onclick="openVideoModal('${v.id}')">Edit</button>
+          <button class="btn-icon del" onclick="deleteVideo('${v.id}')">Delete</button>
         </div>
       </td>
     </tr>
@@ -222,20 +219,14 @@ function openCourseModal(id) {
     const c = courses.find(x => x.id === id);
     document.getElementById("course-modal-title").textContent = "Edit Course";
     document.getElementById("cm-id").value = c.id;
-    document.getElementById("cm-emoji").value = c.emoji || "";
     document.getElementById("cm-title").value = c.title;
     document.getElementById("cm-category").value = c.category;
-    document.getElementById("cm-level").value = c.level;
-    document.getElementById("cm-desc").value = c.desc || "";
     setColorSelection(c.thumbClass || "thumb-blue");
   } else {
     document.getElementById("course-modal-title").textContent = "New Course";
     document.getElementById("cm-id").value = "";
-    document.getElementById("cm-emoji").value = "";
     document.getElementById("cm-title").value = "";
     document.getElementById("cm-category").value = "";
-    document.getElementById("cm-level").value = "Beginner";
-    document.getElementById("cm-desc").value = "";
     setColorSelection("thumb-blue");
   }
   modal.classList.add("open");
@@ -249,22 +240,19 @@ function closeCourseModal() {
 function saveCourse() {
   const title = document.getElementById("cm-title").value.trim();
   const category = document.getElementById("cm-category").value.trim();
-  if (!title || !category) { toast("⚠️ Title and Category are required"); return; }
+  if (!title || !category) { toast("Title and Category are required"); return; }
 
   const id = document.getElementById("cm-id").value;
   const data = {
-    emoji: document.getElementById("cm-emoji").value.trim() || "📚",
     title,
     category,
-    level: document.getElementById("cm-level").value,
-    desc: document.getElementById("cm-desc").value.trim(),
     thumbClass: document.getElementById("cm-color").value,
   };
 
   if (id) {
     const idx = courses.findIndex(c => c.id == id);
     courses[idx] = { ...courses[idx], ...data };
-    toast("✅ Course updated!");
+    toast("Course updated!");
     saveCourses();
     renderSidebar();
     updateDashboard();
@@ -272,7 +260,7 @@ function saveCourse() {
   } else {
     const newId = Date.now();
     courses.push({ id: newId, ...data, videos: [] });
-    toast("✅ Course created!");
+    toast("Course created!");
     saveCourses();
     renderSidebar();
     updateDashboard();
@@ -288,7 +276,7 @@ function deleteCourse(id) {
   renderSidebar();
   updateDashboard();
   showDashboard();
-  toast("🗑 Course deleted");
+  toast("Course deleted");
 }
 
 // ── VIDEO MODAL ──
@@ -323,7 +311,7 @@ function closeVideoModal() {
 function saveVideo() {
   const title = document.getElementById("vm-title").value.trim();
   const url = document.getElementById("vm-url").value.trim();
-  if (!title || !url) { toast("⚠️ Title and URL are required"); return; }
+  if (!title || !url) { toast("Title and URL are required"); return; }
 
   const course = courses.find(c => c.id === activeCourseId);
   const data = {
@@ -335,10 +323,10 @@ function saveVideo() {
   if (editingVideoId) {
     const idx = course.videos.findIndex(v => v.id === editingVideoId);
     course.videos[idx] = { ...course.videos[idx], ...data };
-    toast("✅ Video updated!");
+    toast("Video updated!");
   } else {
     course.videos.push({ id: "v_" + Date.now(), ...data });
-    toast("✅ Video added!");
+    toast("Video added!");
   }
 
   saveCourses();
@@ -356,7 +344,7 @@ function deleteVideo(vid) {
   renderSidebar();
   updateDashboard();
   renderVideoTable(course);
-  toast("🗑 Video removed");
+  toast("Video removed");
 }
 
 // ── COLOR PICKER ──

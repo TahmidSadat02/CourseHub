@@ -13,11 +13,22 @@
   <div id="login-screen">
     <div class="login-box">
       <div class="logo">Course<span>Hub</span></div>
-      <p>Admin Panel — Sign in to continue</p>
-      <input type="password" id="login-input" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')login()" />
-      <div class="login-hint">Default password: admin123</div>
-      <button class="btn btn-primary" style="width:100%" onclick="login()">Sign In</button>
-      <div class="login-error" id="login-error">Incorrect password. Try again.</div>
+      <h2 style="margin: 1.5rem 0 0.5rem; font-size: 1.75rem; font-weight: 700;">Admin Panel</h2>
+      <p style="color: var(--text-muted); margin-bottom: 2rem;">Sign in to continue</p>
+
+      <div class="form-group" style="margin-bottom: 1.25rem; text-align: left;">
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.875rem;">Email Address</label>
+        <input type="email" id="login-email" placeholder="admin@coursehub.com" onkeydown="if(event.key==='Enter')login()" />
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.5rem; text-align: left;">
+        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.875rem;">Password</label>
+        <input type="password" id="login-password" placeholder="Enter your password" onkeydown="if(event.key==='Enter')login()" />
+      </div>
+
+      <div class="login-hint">Default: admin@coursehub.com / admin123</div>
+      <button class="btn btn-primary" style="width:100%; padding: 0.875rem;" onclick="login()">Sign In</button>
+      <div class="login-error" id="login-error">Incorrect email or password. Try again.</div>
     </div>
   </div>
 
@@ -26,7 +37,7 @@
     <nav>
       <div class="logo">Course<span>Hub</span> <span class="admin-badge">Admin</span></div>
       <div class="nav-right">
-        <a href="coursehub.html" target="_blank" class="nav-link">↗ View Student Site</a>
+        <a href="coursehub.html" target="_blank" class="nav-link">View Student Site</a>
         <button class="btn btn-ghost" onclick="logout()">Sign Out</button>
       </div>
     </nav>
@@ -65,7 +76,7 @@
             </div>
           </div>
           <div class="dashboard-tip">
-            <div class="tip-icon">💡</div>
+            <div class="tip-icon">Tip</div>
             <div>
               <strong>Getting started</strong>
               <p>Select a course from the sidebar to manage its videos, or click <em>+ New</em> to create a course.</p>
@@ -76,16 +87,13 @@
         <!-- COURSE EDITOR -->
         <div id="view-course" style="display:none">
           <div class="page-title-row">
-            <div style="display:flex;align-items:center;gap:1rem">
-              <div class="course-emoji-big" id="edit-course-emoji"></div>
-              <div>
-                <h2 id="edit-course-name"></h2>
-                <p id="edit-course-cat"></p>
-              </div>
+            <div>
+              <h2 id="edit-course-name"></h2>
+              <p id="edit-course-cat"></p>
             </div>
             <div class="action-row">
-              <button class="btn btn-ghost" onclick="openCourseModal(activeCourseId)">✏️ Edit</button>
-              <button class="btn btn-danger" onclick="deleteCourse(activeCourseId)">🗑 Delete</button>
+              <button class="btn btn-ghost" onclick="openCourseModal(activeCourseId)">Edit</button>
+              <button class="btn btn-danger" onclick="deleteCourse(activeCourseId)">Delete</button>
             </div>
           </div>
 
@@ -119,37 +127,17 @@
     <div class="modal">
       <div class="modal-header">
         <h3 id="course-modal-title">New Course</h3>
-        <button class="modal-close" onclick="closeCourseModal()">✕</button>
+        <button class="modal-close" onclick="closeCourseModal()">X</button>
       </div>
       <div class="modal-body">
         <input type="hidden" id="cm-id" />
-        <div class="form-row">
-          <div class="form-group" style="flex:0 0 80px">
-            <label>Emoji</label>
-            <input type="text" id="cm-emoji" maxlength="2" placeholder="📚" />
-          </div>
-          <div class="form-group" style="flex:1">
-            <label>Course Title <span class="req">*</span></label>
-            <input type="text" id="cm-title" placeholder="e.g. Web Development Fundamentals" />
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group" style="flex:1">
-            <label>Category <span class="req">*</span></label>
-            <input type="text" id="cm-category" placeholder="e.g. Programming, Data Science" />
-          </div>
-          <div class="form-group" style="flex:1">
-            <label>Level <span class="req">*</span></label>
-            <select id="cm-level">
-              <option value="Beginner">Beginner</option>
-              <option value="Intermediate">Intermediate</option>
-              <option value="Advanced">Advanced</option>
-            </select>
-          </div>
+        <div class="form-group">
+          <label>Course Title <span class="req">*</span></label>
+          <input type="text" id="cm-title" placeholder="e.g. Web Development Fundamentals" />
         </div>
         <div class="form-group">
-          <label>Description</label>
-          <textarea id="cm-desc" rows="3" placeholder="Short description of this course..."></textarea>
+          <label>Category <span class="req">*</span></label>
+          <input type="text" id="cm-category" placeholder="e.g. Programming, Data Science" />
         </div>
         <div class="form-group">
           <label>Card Color</label>
@@ -169,7 +157,7 @@
     <div class="modal">
       <div class="modal-header">
         <h3 id="video-modal-title">Add Video</h3>
-        <button class="modal-close" onclick="closeVideoModal()">✕</button>
+        <button class="modal-close" onclick="closeVideoModal()">X</button>
       </div>
       <div class="modal-body">
         <input type="hidden" id="vm-id" />
